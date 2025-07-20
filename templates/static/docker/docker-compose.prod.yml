@@ -1,0 +1,12 @@
+# Production overrides
+services:
+  web:
+    labels:
+      caddy: {{domain}}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+    networks:
+      - nginx-proxy
+
+networks:
+  nginx-proxy:
+    external: true

@@ -1,0 +1,12 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "description": "Static website",
+  "scripts": {
+    "build": "npx @tailwindcss/cli -i styles.css -o public/styles.css --minify",
+    "dev": "npx @tailwindcss/cli -i styles.css -o public/styles.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0"
+  }
+}

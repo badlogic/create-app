@@ -1,0 +1,15 @@
+# Development overrides
+services:
+  web:
+    ports:
+      - "8080:80"
+
+  livereload:
+    image: node:alpine
+    stop_grace_period: 1s
+    working_dir: /app
+    command: sh -c "npm install -g livereload && livereload /app/public --port 35729"
+    volumes:
+      - ../public:/app/public
+    ports:
+      - "35729:35729"

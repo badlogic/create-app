@@ -1,0 +1,23 @@
+{
+  "name": "Static files only",
+  "description": "Simple static file server",
+  "prompts": [
+    {
+      "name": "domain",
+      "type": "text",
+      "message": "Domain (e.g. myapp.com)"
+    },
+    {
+      "name": "server",
+      "type": "text",
+      "message": "Production server",
+      "initial": "slayer.marioslab.io"
+    },
+    {
+      "name": "serverDir",
+      "type": "text",
+      "message": "Server directory",
+      "initial": "/home/badlogic"
+    }
+  ]
+}

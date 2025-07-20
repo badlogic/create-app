@@ -1,0 +1,7 @@
+services:
+  web:
+    image: nginx:alpine
+    restart: unless-stopped
+    stop_grace_period: 1s
+    volumes:
+      - ../public:/usr/share/nginx/html:ro

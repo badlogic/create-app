@@ -1,0 +1,5 @@
+node_modules/
+dist/
+test/
+templates/frontend-api/
+templates/fullstack/
