@@ -5,8 +5,8 @@ services:
       caddy: {{domain}}
       caddy.reverse_proxy: "{{upstreams 80}}"
     networks:
-      - nginx-proxy
+      - caddy-network
 
 networks:
-  nginx-proxy:
+  caddy-network:
     external: true

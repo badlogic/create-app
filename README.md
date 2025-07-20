@@ -1,90 +1,98 @@
-# @mariozechner/create-app
+# Create App
 
-A CLI tool for creating deployable apps with Caddy + Docker, designed for self-hosted environments.
+CLI for creating deployable web applications with Docker, Caddy, and modern tooling.
+
+## Why This Exists
+
+Self-hosting web applications shouldn't require complex infrastructure. This CLI creates apps that deploy to a single server with automatic SSL and true dev/prod parity - simple, reliable hosting on your own or rented hardware.
+
+Perfect for:
+- **Personal projects** - blogs, portfolios, side projects
+- **Small businesses** - company websites, internal tools
+- **Prototypes** - MVPs that need real deployment
+- **Learning** - understanding modern deployment without platform lock-in
+
+Not suitable for:
+- **High-scale applications** (use Kubernetes/cloud platforms)
+- **Multi-region deployments** (single server architecture)
+- **Complex microservices** (better served by orchestration platforms)
 
 ## Features
 
-- 🚀 **3 App Types**: Static, Frontend+API, Fullstack
-- 🐳 **Docker-based**: Simple container orchestration
-- 🔒 **Caddy Integration**: Automatic SSL with caddy-docker-proxy
-- 🔧 **Local Development**: Port exposure and debugging support
-- 📦 **One Command Deploy**: Simple rsync + restart deployment
+- **True dev/prod parity** - Identical Docker containers for development and production
+- **Automatic SSL** - Caddy handles Let's Encrypt certificates automatically
+- **Live reload** - Instant feedback during development with file watching
+- **Zero-config deployment** - Single command deploys via rsync to your server
+- **Modern CSS** - Tailwind 4 with automatic compilation and optimization
+- **Docker networking** - Automatic service discovery and routing
+- **Production ready** - Complete server configuration guide
+
+## Quick Start
+
+```bash
+# Create a new app
+npx @mariozechner/create-app my-app
+cd my-app
+
+# Start development server
+./run.sh dev
+
+# Build for production
+./run.sh build
+
+# Deploy to your server
+./run.sh deploy
+```
+
+## Templates
+
+- **Static** - Static files with Tailwind 4 and live reload
+- **Frontend + API** - SPA with backend API (coming soon)
+- **Fullstack** - Complete web application (coming soon)
+
+## Prerequisites
+
+### Server Setup
+
+Your production server needs Docker, Caddy, and proper configuration. See [SERVER.md](SERVER.md) for complete setup instructions.
+
+### DNS Configuration
+
+Point your domain to the server:
+
+```
+A    yourdomain.com    -> server-ip
+A    *.yourdomain.com  -> server-ip  (for subdomains)
+```
 
 ## Usage
 
-```bash
-npx @mariozechner/create-app my-awesome-app
-```
+Workflows are template-specific. After creating a project, check the generated `README.md` for detailed instructions.
 
-Follow the interactive prompts to configure your app.
-
-## App Types
-
-### Static Files Only
-- Simple nginx container serving static files
-- Perfect for documentation sites, landing pages
-- Local dev: serves on configurable port
-
-### Frontend + API
-- Frontend: nginx serving static files
-- Backend: Node.js/TypeScript API server
-- nginx proxies `/api/*` to backend
-- Local dev: both services exposed with debugging
-
-### Fullstack
-- Everything from Frontend + API
-- PostgreSQL database with health checks
-- Database connection ready in backend
-- Local dev: database port exposed for direct connection
-
-## Generated Structure
-
-```
-my-app/
-├── docker-compose.yml    # Caddy labels for automatic SSL
-├── run.sh               # dev/prod/stop/logs/deploy commands
-├── frontend/            # (if applicable)
-├── backend/             # (if applicable)
-└── public/              # (static only)
-```
-
-## Local Development
+**Example:** [Static template workflow](templates/static/README.md)
 
 ```bash
-cd my-app
-./run.sh dev             # Start all services in Docker
+npx @mariozechner/create-app my-blog
+cd my-blog
+cat README.md  # Template-specific instructions
 ```
 
-**True Dev/Prod Parity:**
-- Same Docker containers, nginx, and build process in dev and prod
-- File watchers rebuild frontend/backend on changes
-- Frontend available at `http://localhost:8080`
-- API available at `http://localhost:3333` 
-- Database available at `localhost:5432` (fullstack)
-- Node.js debugging on port `9230`
+## Common Issues
 
-## Production Deployment
+**Server setup required:**
+Before deploying, your server needs Docker and Caddy configured. See [SERVER.md](SERVER.md) for complete setup instructions.
+
+**Template-specific issues:**
+Check the `README.md` in your generated project for troubleshooting specific to your template type.
+
+## Development
+
+To work on this CLI tool itself:
 
 ```bash
-./run.sh deploy          # Deploy to your server
+git clone <repository>
+cd create-app
+npm install
+npm run build
+npx tsx src/cli.ts test-app
 ```
-
-Automatically:
-1. Builds frontend and backend in Docker
-2. Syncs built files to server via rsync
-3. Restarts services on server
-4. SSL certificates managed by Caddy
-
-## Requirements
-
-- Docker & Docker Compose
-- Server with caddy-docker-proxy running
-- SSH access to deployment server
-
-## Template System
-
-Easy to extend with new app types. Each template defines:
-- Interactive prompts
-- File structure
-- Docker configuration
-- Build/deploy scripts
