@@ -94,7 +94,7 @@ function copyTemplateFiles(templateDir: string, destPath: string, config: Record
   copyRecursive(templateDir, destPath);
 }
 
-export async function createApp(projectName: string): Promise<void> {
+export async function createApp(projectName: string, options?: { template?: string; config?: Record<string, any> }): Promise<void> {
   console.log(chalk.blue(`Creating app: ${projectName}`));
   console.log();
 
@@ -114,46 +114,79 @@ export async function createApp(projectName: string): Promise<void> {
   }
 
   // Select template
-  const templateChoice = await prompts({
-    type: 'select',
-    name: 'templateFolder',
-    message: 'What type of app?',
-    choices: templates.map(t => ({
-      title: `${t.name} - ${t.description}`,
-      value: t.folderName
-    }))
-  });
+  let selectedTemplateFolderName: string;
+  
+  if (options?.template) {
+    // Validate provided template
+    const template = templates.find(t => t.folderName === options.template);
+    if (!template) {
+      console.error(chalk.red(`Error: Template "${options.template}" not found`));
+      console.log(chalk.dim('Available templates:'), templates.map(t => t.folderName).join(', '));
+      process.exit(1);
+    }
+    selectedTemplateFolderName = options.template;
+    console.log(chalk.dim(`Using template: ${template.name}`));
+  } else {
+    const templateChoice = await prompts({
+      type: 'select',
+      name: 'templateFolder',
+      message: 'What type of app?',
+      choices: templates.map(t => ({
+        title: `${t.name} - ${t.description}`,
+        value: t.folderName
+      }))
+    });
 
-  if (!templateChoice.templateFolder) {
-    console.log(chalk.dim('Cancelled'));
-    process.exit(0);
+    if (!templateChoice.templateFolder) {
+      console.log(chalk.dim('Cancelled'));
+      process.exit(0);
+    }
+    
+    selectedTemplateFolderName = templateChoice.templateFolder;
   }
 
-  const template = templates.find(t => t.folderName === templateChoice.templateFolder)!;
+  const template = templates.find(t => t.folderName === selectedTemplateFolderName)!;
 
   // Start with project name
   const config: Record<string, any> = {
     name: projectName
   };
 
+  // Add provided config values
+  if (options?.config) {
+    Object.assign(config, options.config);
+  }
+
   // Convert template prompts to prompts format and run them
   if (template.prompts.length > 0) {
-    const promptsConfig = template.prompts.map(p => ({
-      type: p.type === 'bool' ? ('confirm' as const) : (p.type as 'text' | 'number'),
-      name: p.name,
-      message: p.message,
-      initial: p.initial
-    }));
+    // Filter out prompts that already have values from CLI args
+    const remainingPrompts = template.prompts.filter(p => !(p.name in config));
+    
+    if (remainingPrompts.length > 0) {
+      const promptsConfig = remainingPrompts.map(p => ({
+        type: p.type === 'bool' ? ('confirm' as const) : (p.type as 'text' | 'number'),
+        name: p.name,
+        message: p.message,
+        initial: p.initial
+      }));
 
-    console.log();
-    const answers = await prompts(promptsConfig);
+      console.log();
+      const answers = await prompts(promptsConfig);
 
-    if (Object.keys(answers).length !== template.prompts.length) {
-      console.log(chalk.dim('Cancelled'));
-      process.exit(0);
+      if (Object.keys(answers).length !== remainingPrompts.length) {
+        console.log(chalk.dim('Cancelled'));
+        process.exit(0);
+      }
+
+      Object.assign(config, answers);
     }
 
-    Object.assign(config, answers);
+    // Fill in any missing values with defaults
+    for (const prompt of template.prompts) {
+      if (!(prompt.name in config) && prompt.initial !== undefined) {
+        config[prompt.name] = prompt.initial;
+      }
+    }
   }
 
   // Create project directory

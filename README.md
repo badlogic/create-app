@@ -26,28 +26,43 @@ Not suitable for:
 - **Modern CSS** - Tailwind 4 with automatic compilation and optimization
 - **Docker networking** - Automatic service discovery and routing
 - **Production ready** - Complete server configuration guide
+- **CLI automation** - Create projects with arguments, no interactive prompts needed
 
 ## Quick Start
 
+### Interactive Setup
 ```bash
-# Create a new app
+# Create a new app (prompts for template and configuration)
 npx @mariozechner/create-app my-app
 cd my-app
 
 # Start development server
 ./run.sh dev
 
-# Build for production
-./run.sh build
-
-# Deploy to your server
+# Deploy to your server  
 ./run.sh deploy
+```
+
+### CLI Arguments (No Prompts)
+```bash
+# Create with all options specified
+npx @mariozechner/create-app my-app \
+  --template frontend-api \
+  --domain myapp.com \
+  --server myserver.hetzner.de \
+  --serverDir /home/username
+
+# Quick static site
+npx @mariozechner/create-app my-blog --template static --domain blog.example.com
+
+# See all options
+npx @mariozechner/create-app --help
 ```
 
 ## Templates
 
 - **Static** - Static files with Tailwind 4 and live reload
-- **Frontend + API** - SPA with backend API (coming soon)
+- **Frontend + API** - SPA with backend API
 - **Fullstack** - Complete web application (coming soon)
 
 ## Prerequisites
@@ -67,9 +82,23 @@ A    *.yourdomain.com  -> server-ip  (for subdomains)
 
 ## Usage
 
-Workflows are template-specific. After creating a project, check the generated `README.md` for detailed instructions.
+### CLI Options
 
-**Example:** [Static template workflow](templates/static/README.md)
+| Option | Short | Description | Example |
+|--------|-------|-------------|---------|
+| `--template` | `-t` | Template to use | `--template frontend-api` |
+| `--domain` | | Domain for the app | `--domain myapp.com` |
+| `--server` | | Production server hostname | `--server myserver.com` |
+| `--serverDir` | | Server directory path | `--serverDir /home/username` |
+| `--frontendPort` | | Frontend development port | `--frontendPort 3000` |
+| `--apiPort` | | API development port | `--apiPort 8000` |
+| `--help` | `-h` | Show help message | `--help` |
+
+**Available templates:** `static`, `frontend-api`, `fullstack`
+
+### Template-Specific Instructions
+
+After creating a project, check the generated `README.md` for detailed instructions specific to your template.
 
 ```bash
 npx @mariozechner/create-app my-blog
