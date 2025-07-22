@@ -6,7 +6,7 @@ export default defineConfig({
   outDir: 'dist',
   clean: false,
   minify: true,
-  outExtension({ format }) {
+  outExtension() {
     return {
       js: '.js', // This makes it output index.js instead of index.global.js
     }

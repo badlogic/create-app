@@ -4,7 +4,7 @@ CLI for creating deployable web applications with Docker, Caddy, and modern tool
 
 ## Why This Exists
 
-Self-hosting web applications shouldn't require complex infrastructure. This CLI creates apps that deploy to a single server with automatic SSL and true dev/prod parity - simple, reliable hosting on your own or rented hardware.
+Self-hosting web applications shouldn't require complex infrastructure. This CLI creates apps that deploy to a single server with automatic SSL and dev/prod parity - simple, reliable hosting on your own or rented hardware.
 
 Perfect for:
 - **Personal projects** - blogs, portfolios, side projects
@@ -17,17 +17,6 @@ Not suitable for:
 - **Multi-region deployments** (single server architecture)
 - **Complex microservices** (better served by orchestration platforms)
 
-## Features
-
-- **True dev/prod parity** - Identical Docker containers for development and production
-- **Automatic SSL** - Caddy handles Let's Encrypt certificates automatically
-- **Live reload** - Instant feedback during development with file watching
-- **Zero-config deployment** - Single command deploys via rsync to your server
-- **Modern CSS** - Tailwind 4 with automatic compilation and optimization
-- **Docker networking** - Automatic service discovery and routing
-- **Production ready** - Complete server configuration guide
-- **CLI automation** - Create projects with arguments, no interactive prompts needed
-
 ## Quick Start
 
 ### Interactive Setup
@@ -39,7 +28,7 @@ cd my-app
 # Start development server
 ./run.sh dev
 
-# Deploy to your server  
+# Deploy to your server
 ./run.sh deploy
 ```
 

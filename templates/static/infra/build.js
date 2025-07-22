@@ -19,7 +19,9 @@ function cleanAndCopyStaticFiles() {
     filter: (source) => {
 
       return !source.endsWith('.ts') &&
+             !source.endsWith('.tsx') &&
              !source.endsWith('.js') &&
+             !source.endsWith('.jsx') &&
              !source.endsWith('.css') ||
              source === src;
     }
