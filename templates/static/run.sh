@@ -2,45 +2,61 @@
 
 set -e
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 PROJECT={{name}}
 SERVER={{server}}
 SERVER_DIR={{serverDir}}
 DOMAIN={{domain}}
 
+# Use different project name if PORT is set to allow multiple instances
+if [ -n "$PORT" ]; then
+    PROJECT="${PROJECT}-${PORT}"
+fi
+
+sync_files() {
+    echo "Building for production..."
+    npm install
+    node infra/build.js
+
+    echo "Syncing files..."
+    rsync -avz \
+      --include="dist/***" \
+      --include="infra/***" \
+      --include="run.sh" \
+      --exclude="*" \
+      --delete \
+      ./ $SERVER:$SERVER_DIR/$DOMAIN/
+}
+
+pushd "$SCRIPT_DIR" > /dev/null
+
 case "$1" in
 dev)
     echo "Starting development server..."
     npm install
-    npm run build
-    npm run dev &
-    docker compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up --build --menu=false
+    infra/build.js
+    infra/build.js --watch &
+    docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml up --build --menu=false
     ;;
 prod)
     echo "Starting production server..."
-    docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml up -d --build
+    docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml up -d --build
     ;;
 stop)
     echo "Stopping services..."
-    docker compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml down 2>/dev/null || \
-    docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml down
+    docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml down 2>/dev/null || \
+    docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml down
     ;;
 logs)
-    docker compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml logs -f 2>/dev/null || \
-    docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml logs -f
+    docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml logs -f 2>/dev/null || \
+    docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml logs -f
     ;;
 deploy)
     echo "Deploying $PROJECT to $DOMAIN..."
-
-    echo "Building for production..."
     npm install
-    npm run build
-
-    echo "Syncing files..."
-    rsync -avz --delete \
-      --exclude node_modules \
-      --exclude .git \
-      --exclude .DS_Store \
-      ./ $SERVER:$SERVER_DIR/$DOMAIN/
+    infra/build.js
+    sync_files
 
     echo "Restarting services..."
     ssh $SERVER "cd $SERVER_DIR/$DOMAIN && ./run.sh stop && ./run.sh prod"
@@ -49,18 +65,7 @@ deploy)
     ;;
 sync)
     echo "Syncing $PROJECT to $DOMAIN..."
-
-    echo "Building for production..."
-    npm install
-    npm run build
-
-    echo "Syncing files..."
-    rsync -avz --delete \
-      --exclude node_modules \
-      --exclude .git \
-      --exclude .DS_Store \
-      ./ $SERVER:$SERVER_DIR/$DOMAIN/
-
+    sync_files
     echo "✅ Synced to $DOMAIN"
     ;;
 *)
@@ -75,3 +80,5 @@ sync)
     exit 1
     ;;
 esac
+
+popd > /dev/null

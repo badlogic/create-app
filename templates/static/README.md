@@ -1,6 +1,6 @@
 # {{name}}
 
-Static site with Tailwind 4, live reload, and Docker deployment.
+Static site with TypeScript, Tailwind 4, live reload, and Docker deployment.
 
 ## Workflow
 
@@ -11,90 +11,75 @@ Static site with Tailwind 4, live reload, and Docker deployment.
 ./run.sh dev
 
 # Your app is now running at http://localhost:8080
-# Edit files in public/ and see changes instantly
+# Edit files in src/ and see changes instantly
+
+# Run on a different port
+PORT=8081 ./run.sh dev
+
+# For parallel development, use git worktrees
+git worktree add ../{{name}}-feature feature-branch
+cd ../{{name}}-feature
+PORT=8081 ./run.sh dev  # Runs independently with its own dist/
 ```
 
 ### 2. Production Deployment
 
 ```bash
-# Build production assets
-./run.sh build
-
-# Deploy to your server
+# Deploy to your server (builds automatically)
 ./run.sh deploy
 ```
 
 The deploy command:
-1. Builds production Docker image
+1. Builds TypeScript and CSS locally
 2. Syncs files to your server via rsync
-3. Starts services with Docker Compose
+3. Restarts services with Docker Compose
 4. Caddy automatically handles SSL and routing
 
 ## Project Structure
 
 ```
 {{name}}/
-├── public/           # Your website files
-│   ├── index.html
-│   ├── styles.css
-│   └── ...
-├── docker/
+├── src/             # Source files
+│   ├── index.html   # Main HTML
+│   ├── index.ts     # TypeScript (includes live reload)
+│   └── styles.css   # Tailwind CSS
+├── dist/            # Build output (git ignored)
+├── infra/           # Infrastructure
+│   ├── build.js     # Build script
 │   ├── docker-compose.yml      # Base configuration
 │   ├── docker-compose.dev.yml  # Development overrides
 │   └── docker-compose.prod.yml # Production overrides
-├── run.sh           # Development commands
-├── deploy.sh        # Deployment script
-└── package.json     # Dependencies (Tailwind, etc.)
+├── run.sh           # All-in-one CLI
+└── package.json     # Dependencies
 ```
-
-## Troubleshooting
-
-### Development Issues
-
-**Port already in use:**
-```bash
-./run.sh stop
-./run.sh dev
-```
-
-**Live reload not working:**
-- Check that you're editing files in `public/`
-- Ensure port 35729 isn't blocked
-- Try refreshing the browser
-
-### Deployment Issues
-
-**SSH connection failed:**
-- Verify SSH key authentication is set up
-- Check that your user has Docker group permissions
-- Ensure the server is reachable
-
-**Domain not accessible:**
-- Verify DNS points to your server IP
-- Check that Caddy is running: `docker ps | grep caddy`
-- Wait 30 seconds for SSL certificate generation
-
-**Permission denied:**
-- Ensure your user is in the Docker group
-- Log out and back in after adding to Docker group
-- Check file permissions on the server
 
 ## Commands
 
 ```bash
-./run.sh dev      # Start dev server at localhost:8080
-./run.sh build    # Build production assets
-./run.sh deploy   # Deploy to {{domain}}
-./run.sh sync     # Sync files only
-./run.sh stop     # Stop containers
+./run.sh dev              # Start dev server at localhost:8080
+PORT=8081 ./run.sh dev    # Start on custom port
+./run.sh prod             # Run production locally
+./run.sh deploy           # Deploy to {{domain}}
+./run.sh sync             # Sync files (dist/, infra/) to {{domain}}
+./run.sh stop             # Stop containers locally
+./run.sh logs             # View container logs locally
 ```
 
 Deploys to `{{serverDir}}/{{domain}}/` on `{{server}}`. Caddy automatically routes `{{domain}}` traffic to this container with SSL.
 
 ## Tech Stack
 
+- **TypeScript** with tsup bundler
 - **Tailwind 4** with automatic compilation
 - **Nginx** static file server
-- **Live reload** in development
+- **Live reload** via WebSocket proxy (no separate port)
 - **Docker** for dev/prod parity
 - **Caddy** reverse proxy with automatic SSL
+
+## Architecture Notes
+
+- All traffic goes through nginx (port 80), including WebSocket connections
+- Live reload WebSocket is proxied at `/livereload` endpoint
+- Multiple instances can run simultaneously with different PORT values
+- Each instance gets its own Docker containers (project-name includes port)
+- Git worktrees recommended for parallel feature development

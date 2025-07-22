@@ -92,9 +92,18 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo docker run hello-world
 
 # Add user to docker group (requires logout/login)
-# WARNING: Docker group membership gives root-equivalent access
+# ⚠️  SECURITY WARNING: Docker group membership gives root-equivalent access! ⚠️
+# Anyone in the 'docker' group can trivially become root on the host system.
+# Only do this on single-user machines. For production servers, consider:
+# - Using 'sudo docker' instead (more secure)
+# - Setting up Docker rootless mode
+# - Using Podman as a rootless alternative
 sudo usermod -aG docker $USER
+
+# If you skip this step, you'll need to use 'sudo' for all docker commands
 ```
+
+**What does "root-equivalent access" mean?** Any user in the docker group can mount system files and become root. For example: `docker run -v /etc:/host ubuntu rm -rf /host/*` would delete system files. Only add trusted users to the docker group.
 
 ### 2. Create Docker Network
 

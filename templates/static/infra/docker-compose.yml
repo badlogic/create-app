@@ -4,4 +4,5 @@ services:
     restart: unless-stopped
     stop_grace_period: 1s
     volumes:
-      - ../public:/usr/share/nginx/html:ro
+      - ../dist:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro

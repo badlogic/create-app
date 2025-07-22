@@ -2,11 +2,13 @@
   "name": "{{name}}",
   "version": "1.0.0",
   "description": "Static website",
+  "type": "module",
   "scripts": {
-    "build": "npx @tailwindcss/cli -i styles.css -o public/styles.css --minify",
-    "dev": "npx @tailwindcss/cli -i styles.css -o public/styles.css --watch"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.0.0"
+    "tailwindcss": "^4.1.11",
+    "@tailwindcss/cli": "^4.1.11",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
   }
 }

@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{name}}</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
+
 <body>
     <div class="max-w-4xl mx-auto px-8 py-16 text-center">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">{{name}}</h1>
         <p class="text-xl text-gray-600 mb-4">Your static site is ready!</p>
-        <p class="text-gray-500">Edit <code class="bg-gray-100 px-2 py-1 rounded text-sm">public/index.html</code> to get started.</p>
+        <p class="text-gray-500">
+            Edit <code class="bg-gray-100 px-2 py-1 rounded text-sm">src/index.html</code> or <code class="bg-gray-100 px-2 py-1 rounded text-sm">src/index.ts</code> to get started.
+        </p>
     </div>
-    <script>
-        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-            const script = document.createElement('script');
-            script.src = '/live-reload.js';
-            document.head.appendChild(script);
-        }
-    </script>
+    <script src="index.js"></script>
 </body>
+
 </html>

@@ -73,6 +73,9 @@ function copyTemplateFiles(templateDir: string, destPath: string, config: Record
           fs.mkdirSync(destFileDir, { recursive: true });
         }
 
+        // Get source file permissions
+        const srcStats = fs.statSync(srcPath);
+        
         if (isTextFile(srcPath)) {
           // Text file - apply template substitution
           let content = fs.readFileSync(srcPath, 'utf8');
@@ -82,11 +85,9 @@ function copyTemplateFiles(templateDir: string, destPath: string, config: Record
           // Binary file - copy as-is
           fs.copyFileSync(srcPath, destFilePath);
         }
-
-        // Make shell scripts executable
-        if (item.name.endsWith('.sh')) {
-          fs.chmodSync(destFilePath, 0o755);
-        }
+        
+        // Always preserve file permissions from template
+        fs.chmodSync(destFilePath, srcStats.mode);
       }
     }
   }

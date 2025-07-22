@@ -2,7 +2,7 @@
 services:
   web:
     ports:
-      - "8080:80"
+      - "${PORT:-8080}:80"
 
   livereload:
     image: node:alpine
@@ -10,6 +10,4 @@ services:
     working_dir: /app
     command: sh -c "npm install -g livereload && livereload /app/public --port 35729"
     volumes:
-      - ../public:/app/public
-    ports:
-      - "35729:35729"
+      - ../dist:/app/public
