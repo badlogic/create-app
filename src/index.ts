@@ -8,7 +8,7 @@ import type { TemplateConfig } from "./types.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function replaceTemplateVars(content: string, config: Record<string, any>): string {
+function replaceTemplateVars(content: string, config: Record<string, string | number | boolean>): string {
    let result = content;
 
    for (const [key, value] of Object.entries(config)) {
@@ -48,7 +48,11 @@ function isTextFile(filePath: string): boolean {
    return result === true;
 }
 
-function copyTemplateFiles(templateDir: string, destPath: string, config: Record<string, any>): void {
+function copyTemplateFiles(
+   templateDir: string,
+   destPath: string,
+   config: Record<string, string | number | boolean>,
+): void {
    function copyRecursive(srcDir: string, destDir: string, relativePath = "") {
       const items = fs.readdirSync(srcDir, { withFileTypes: true });
 
@@ -98,7 +102,7 @@ function copyTemplateFiles(templateDir: string, destPath: string, config: Record
 
 export async function createApp(
    projectName: string,
-   options?: { template?: string; config?: Record<string, any> },
+   options?: { template?: string; config?: Record<string, string | number | boolean> },
 ): Promise<void> {
    console.log(chalk.blue(`Creating app: ${projectName}`));
    console.log();
@@ -150,10 +154,14 @@ export async function createApp(
       selectedTemplateFolderName = templateChoice.templateFolder;
    }
 
-   const template = templates.find((t) => t.folderName === selectedTemplateFolderName)!;
+   const template = templates.find((t) => t.folderName === selectedTemplateFolderName);
+   if (!template) {
+      console.error(chalk.red(`Error: Template "${selectedTemplateFolderName}" not found`));
+      process.exit(1);
+   }
 
    // Start with project name
-   const config: Record<string, any> = {
+   const config: Record<string, string | number | boolean> = {
       name: projectName,
    };
 

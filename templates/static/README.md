@@ -46,6 +46,7 @@ The deploy command:
 ├── dist/            # Build output (git ignored)
 ├── infra/           # Infrastructure
 │   ├── build.js     # Build script
+│   ├── Caddyfile    # Caddy web server configuration
 │   ├── docker-compose.yml      # Base configuration
 │   ├── docker-compose.dev.yml  # Development overrides
 │   └── docker-compose.prod.yml # Production overrides
@@ -71,14 +72,14 @@ Deploys to `{{serverDir}}/{{domain}}/` on `{{server}}`. Caddy automatically rout
 
 - **TypeScript** with tsup bundler
 - **Tailwind 4** with automatic compilation
-- **Nginx** static file server
+- **Caddy** web server with automatic HTTPS
 - **Live reload** via WebSocket proxy (no separate port)
 - **Docker** for dev/prod parity
 - **Caddy** reverse proxy with automatic SSL
 
 ## Architecture Notes
 
-- All traffic goes through nginx (port 80), including WebSocket connections
+- All traffic goes through Caddy (port 80), including WebSocket connections
 - Live reload WebSocket is proxied at `/livereload` endpoint
 - Multiple instances can run simultaneously with different PORT values
 - Each instance gets its own Docker containers (project-name includes port)

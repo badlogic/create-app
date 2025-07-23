@@ -1,8 +1,8 @@
 services:
   web:
-    image: nginx:alpine
+    image: caddy:alpine
     restart: unless-stopped
     stop_grace_period: 1s
     volumes:
-      - ../dist:/usr/share/nginx/html:ro
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../dist:/srv:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro

@@ -1,0 +1,25 @@
+:80 {
+	root * /srv
+	
+	# Live reload WebSocket proxy (development only)
+	# Must come before file_server
+	@websocket {
+		path /livereload
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	handle @websocket {
+		reverse_proxy livereload:35729
+	}
+	
+	# Also handle regular HTTP requests to /livereload
+	handle /livereload {
+		reverse_proxy livereload:35729
+	}
+	
+	# Handle everything else with SPA routing
+	handle {
+		try_files {path} {path}/ /index.html
+		file_server
+	}
+}

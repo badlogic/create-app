@@ -3,13 +3,15 @@
 import chalk from "chalk";
 import { createApp } from "./index.js";
 
-function parseArgs(args: string[]): {
+type ParsedArgs = {
    projectName?: string;
    template?: string;
-   config?: Record<string, any>;
+   config?: Record<string, string | number | boolean>;
    help?: boolean;
-} {
-   const result: { projectName?: string; template?: string; config?: Record<string, any>; help?: boolean } = {
+};
+
+function parseArgs(args: string[]): ParsedArgs {
+   const result: ParsedArgs = {
       config: {},
    };
 
@@ -26,8 +28,10 @@ function parseArgs(args: string[]): {
          const configKey = key.replace(/^--/, "");
 
          // Try to parse as number, otherwise keep as string
-         const parsedValue = !isNaN(Number(value)) && value !== "" ? Number(value) : value;
-         result.config![configKey] = parsedValue;
+         const parsedValue = !Number.isNaN(Number(value)) && value !== "" ? Number(value) : value;
+         if (result.config) {
+            result.config[configKey] = parsedValue;
+         }
       } else if (!result.projectName) {
          result.projectName = arg;
       }
