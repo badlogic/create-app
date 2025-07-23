@@ -4,8 +4,14 @@
   "description": "Static website",
   "type": "module",
   "scripts": {
+    "build": "node infra/build.js",
+    "dev": "./run.sh dev",
+    "check": "biome check --write . && tsc --noEmit",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.1.2",
+    "husky": "^9.1.1",
     "tailwindcss": "^4.1.11",
     "@tailwindcss/cli": "^4.1.11",
     "tsup": "^8.5.0",

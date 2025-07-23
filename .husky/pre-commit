@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# Run biome check with auto-fix
+npm run check
+
+# If biome or tsc failed, abort the commit
+if [ $? -ne 0 ]; then
+  echo "❌ Pre-commit checks failed. Please fix the errors and try again."
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed!"
