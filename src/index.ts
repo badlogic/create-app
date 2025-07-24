@@ -3,8 +3,8 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import chalk from "chalk";
 import { isText } from "istextorbinary";
-import prompts from "prompts";
 import * as yaml from "js-yaml";
+import prompts from "prompts";
 import type { TemplateConfig } from "./types.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -94,7 +94,7 @@ function copyTemplateFilesRecursive(
          if (item.name.startsWith("+")) {
             const targetName = item.name.slice(1); // Remove + prefix
             const targetPath = path.join(destDir, targetName);
-            
+
             if (fs.existsSync(targetPath)) {
                mergeFile(srcPath, targetPath, config);
                continue;
@@ -155,31 +155,34 @@ function copyTemplateFilesRecursive(
 
 function mergeFile(srcPath: string, targetPath: string, config: Record<string, string | number | boolean>): void {
    const ext = path.extname(srcPath).toLowerCase();
-   
+
    try {
-      if (ext === '.json') {
-         const srcContent = fs.readFileSync(srcPath, 'utf8');
+      if (ext === ".json") {
+         const srcContent = fs.readFileSync(srcPath, "utf8");
          const processedSrc = replaceTemplateVars(srcContent, config);
          const srcObj = JSON.parse(processedSrc);
-         
-         const targetObj = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
-         
+
+         const targetObj = JSON.parse(fs.readFileSync(targetPath, "utf8"));
+
          const merged = deepMerge(targetObj, srcObj);
          fs.writeFileSync(targetPath, JSON.stringify(merged, null, 2));
-      } else if (ext === '.yml' || ext === '.yaml') {
-         const srcContent = fs.readFileSync(srcPath, 'utf8');
+      } else if (ext === ".yml" || ext === ".yaml") {
+         const srcContent = fs.readFileSync(srcPath, "utf8");
          const processedSrc = replaceTemplateVars(srcContent, config);
          const srcObj = yaml.load(processedSrc) as any;
-         
-         const targetContent = fs.readFileSync(targetPath, 'utf8');
+
+         const targetContent = fs.readFileSync(targetPath, "utf8");
          const targetObj = yaml.load(targetContent) as any;
-         
+
          const merged = deepMerge(targetObj, srcObj);
-         fs.writeFileSync(targetPath, yaml.dump(merged, { 
-            indent: 2,
-            lineWidth: -1,
-            noRefs: true
-         }));
+         fs.writeFileSync(
+            targetPath,
+            yaml.dump(merged, {
+               indent: 2,
+               lineWidth: -1,
+               noRefs: true,
+            }),
+         );
       } else {
          console.warn(`Don't know how to merge file type: ${srcPath}`);
       }
@@ -192,12 +195,12 @@ function deepMerge(target: any, source: any): any {
    if (Array.isArray(target) && Array.isArray(source)) {
       return [...target, ...source];
    }
-   
-   if (target && typeof target === 'object' && source && typeof source === 'object') {
+
+   if (target && typeof target === "object" && source && typeof source === "object") {
       const result = { ...target };
-      
+
       for (const key in source) {
-         if (source.hasOwnProperty(key)) {
+         if (Object.hasOwn(source, key)) {
             if (key in result) {
                result[key] = deepMerge(result[key], source[key]);
             } else {
@@ -205,10 +208,10 @@ function deepMerge(target: any, source: any): any {
             }
          }
       }
-      
+
       return result;
    }
-   
+
    return source;
 }
 
@@ -234,10 +237,7 @@ function handleDeletions(templateDir: string, destPath: string): void {
             }
          } else if (item.isDirectory() && !item.name.startsWith("-")) {
             // Recursively process subdirectories
-            processDirectory(
-               path.join(srcDir, item.name),
-               path.join(destDir, item.name)
-            );
+            processDirectory(path.join(srcDir, item.name), path.join(destDir, item.name));
          }
       }
    }
@@ -248,13 +248,13 @@ function handleDeletions(templateDir: string, destPath: string): void {
 function resolveTemplateInheritance(
    templates: Array<TemplateConfig & { folderName: string }>,
    templateName: string,
-   visited = new Set<string>()
+   visited = new Set<string>(),
 ): string[] {
    if (visited.has(templateName)) {
       throw new Error(`Circular dependency detected in template inheritance: ${templateName}`);
    }
 
-   const template = templates.find(t => t.folderName === templateName);
+   const template = templates.find((t) => t.folderName === templateName);
    if (!template) {
       throw new Error(`Template not found: ${templateName}`);
    }
@@ -384,10 +384,7 @@ export async function createApp(
 
    // Resolve template inheritance chain
    const parentTemplateNames = resolveTemplateInheritance(templates, template.folderName);
-   const parentTemplateDirs = parentTemplateNames.map(name => 
-      path.join(templatesDir, name)
-   );
-
+   const parentTemplateDirs = parentTemplateNames.map((name) => path.join(templatesDir, name));
 
    // Copy template files with inheritance
    const templateDir = path.join(templatesDir, template.folderName);
