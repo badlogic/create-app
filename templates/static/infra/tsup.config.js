@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/frontend/index.ts'],
   format: ['iife'],
   outDir: 'dist',
   clean: false,

@@ -1,0 +1,5 @@
+# Production overrides
+services:
+  backend:
+    networks:
+      - caddy-network

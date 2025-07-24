@@ -35,8 +35,8 @@ case "$1" in
 dev)
     echo "Starting development server..."
     npm install
-    infra/build.js
-    infra/build.js --watch &
+    node infra/build.js
+    node infra/build.js --watch &
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml up --build --menu=false
     ;;
 prod)
@@ -55,7 +55,7 @@ logs)
 deploy)
     echo "Deploying $PROJECT to $DOMAIN..."
     npm install
-    infra/build.js
+    node infra/build.js
     sync_files
 
     echo "Restarting services..."

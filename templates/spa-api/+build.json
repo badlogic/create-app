@@ -1,0 +1,10 @@
+{
+  "build": [
+    ["node", "infra/generate-env.js"],
+    ["npx", "tsup", "--config", "infra/tsup.backend.config.js"]
+  ],
+  "watch": [
+    ["node", "infra/generate-env.js"],
+    ["npx", "tsup", "--config", "infra/tsup.backend.config.js", "--watch"]
+  ]
+}

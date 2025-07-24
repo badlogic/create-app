@@ -75,3 +75,20 @@ export function watchStaticFiles(src, dist, callback) {
   
   return watcher;
 }
+
+// CLI interface
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const [, , src, dist, watchFlag] = process.argv;
+  
+  if (!src || !dist) {
+    console.error('Usage: node static-files.js <src> <dist> [--watch]');
+    process.exit(1);
+  }
+  
+  if (watchFlag === '--watch') {
+    cleanAndCopyStaticFiles(src, dist);
+    watchStaticFiles(src, dist);
+  } else {
+    cleanAndCopyStaticFiles(src, dist);
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "SPA + API",
+  "description": "Single Page App with API backend",
+  "inherits": ["static"],
+  "prompts": [
+    {
+      "name": "domain",
+      "type": "text",
+      "message": "Domain (e.g. myapp.com)"
+    },
+    {
+      "name": "server",
+      "type": "text",
+      "message": "Production server",
+      "initial": "slayer.marioslab.io"
+    },
+    {
+      "name": "serverDir",
+      "type": "text",
+      "message": "Server directory",
+      "initial": "/home/badlogic"
+    },
+    {
+      "name": "apiPort",
+      "type": "number",
+      "message": "API development port",
+      "initial": 3000
+    }
+  ]
+}

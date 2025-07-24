@@ -1,0 +1,12 @@
+{
+  "build": [
+    ["node", "infra/static-files.js", "src/frontend", "dist"],
+    ["npx", "tsup", "--config", "infra/tsup.config.js"],
+    ["npx", "@tailwindcss/cli", "-i", "src/frontend/styles.css", "-o", "dist/styles.css", "--minify"]
+  ],
+  "watch": [
+    ["node", "infra/static-files.js", "src/frontend", "dist", "--watch"],
+    ["npx", "tsup", "--config", "infra/tsup.config.js", "--watch"],
+    ["npx", "@tailwindcss/cli", "-i", "src/frontend/styles.css", "-o", "dist/styles.css", "--watch=always"]
+  ]
+}

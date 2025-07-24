@@ -15,17 +15,25 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "prompts": "^2.4.2",
     "chalk": "^5.4.1",
-    "istextorbinary": "^9.5.0"
+    "istextorbinary": "^9.5.0",
+    "js-yaml": "^4.1.0",
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "@types/prompts": "^2.4.9",
-    "typescript": "^5.8.3",
     "@biomejs/biome": "^2.1.2",
-    "husky": "^9.1.1"
+    "@types/js-yaml": "^4.0.9",
+    "@types/prompts": "^2.4.9",
+    "husky": "^9.1.1",
+    "typescript": "^5.8.3"
   },
-  "keywords": ["cli", "docker", "caddy", "deployment", "templates"],
+  "keywords": [
+    "cli",
+    "docker",
+    "caddy",
+    "deployment",
+    "templates"
+  ],
   "author": "Mario Zechner <contact@mariozechner.at>",
   "license": "MIT"
 }

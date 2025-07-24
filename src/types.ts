@@ -1,6 +1,7 @@
 export interface TemplateConfig {
    name: string; // Display name for CLI
    description: string;
+   inherits?: string[]; // Parent template names
    prompts: Prompt[];
 }
 
