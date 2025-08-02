@@ -33,6 +33,7 @@ pushd "$SCRIPT_DIR" > /dev/null
 
 case "$1" in
 dev)
+    ./run.sh stop
     echo "Starting development server..."
     npm install
     node infra/build.js

@@ -169,10 +169,10 @@ function mergeFile(srcPath: string, targetPath: string, config: Record<string, s
       } else if (ext === ".yml" || ext === ".yaml") {
          const srcContent = fs.readFileSync(srcPath, "utf8");
          const processedSrc = replaceTemplateVars(srcContent, config);
-         const srcObj = yaml.load(processedSrc) as any;
+         const srcObj = yaml.load(processedSrc) as Record<string, unknown>;
 
          const targetContent = fs.readFileSync(targetPath, "utf8");
-         const targetObj = yaml.load(targetContent) as any;
+         const targetObj = yaml.load(targetContent) as Record<string, unknown>;
 
          const merged = deepMerge(targetObj, srcObj);
          fs.writeFileSync(
@@ -191,20 +191,22 @@ function mergeFile(srcPath: string, targetPath: string, config: Record<string, s
    }
 }
 
-function deepMerge(target: any, source: any): any {
+function deepMerge(target: unknown, source: unknown): unknown {
    if (Array.isArray(target) && Array.isArray(source)) {
       return [...target, ...source];
    }
 
    if (target && typeof target === "object" && source && typeof source === "object") {
-      const result = { ...target };
+      const targetObj = target as Record<string, unknown>;
+      const sourceObj = source as Record<string, unknown>;
+      const result: Record<string, unknown> = { ...targetObj };
 
-      for (const key in source) {
-         if (Object.hasOwn(source, key)) {
+      for (const key in sourceObj) {
+         if (Object.hasOwn(sourceObj, key)) {
             if (key in result) {
-               result[key] = deepMerge(result[key], source[key]);
+               result[key] = deepMerge(result[key], sourceObj[key]);
             } else {
-               result[key] = source[key];
+               result[key] = sourceObj[key];
             }
          }
       }

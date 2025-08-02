@@ -1,0 +1,3 @@
+- Add tsconfig.json to templates, update check in package.json to ensure all .ts files are type checked (frontend/backend)
+- ./run.sh dev must stop existing and start new. often the containers don't start up
+- precommit hook formats but doesn't stage files that got formatted, after commit new changes due to formatting are unstaged
