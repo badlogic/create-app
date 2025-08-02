@@ -1,6 +1,13 @@
 :80 {
 	root * /srv
 	
+	# Enable compression for all responses
+	encode {
+		zstd
+		gzip
+		minimum_length 256
+	}
+	
 	# Live reload WebSocket proxy (development only)
 	# Must come before file_server
 	@websocket {
