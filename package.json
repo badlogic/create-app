@@ -1,7 +1,7 @@
 {
   "name": "@mariozechner/create-app",
-  "version": "1.0.0",
-  "description": "CLI for creating deployable, self-",
+  "version": "1.0.1",
+  "description": "CLI for creating deployable web applications with Docker, Caddy, and modern tooling",
   "bin": {
     "create-app": "dist/cli.js"
   },
@@ -35,5 +35,13 @@
     "templates"
   ],
   "author": "Mario Zechner <contact@mariozechner.at>",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badlogic/create-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/badlogic/create-app/issues"
+  },
+  "homepage": "https://github.com/badlogic/create-app#readme"
 }
