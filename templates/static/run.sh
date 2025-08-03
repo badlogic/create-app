@@ -53,6 +53,10 @@ logs)
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml logs -f 2>/dev/null || \
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml logs -f
     ;;
+logs-remote)
+    echo "Streaming logs from $DOMAIN..."
+    ssh -t $SERVER "cd $SERVER_DIR/$DOMAIN && ./run.sh logs"
+    ;;
 deploy)
     echo "Deploying $PROJECT to $DOMAIN..."
     npm install
@@ -70,14 +74,15 @@ sync)
     echo "✅ Synced to $DOMAIN"
     ;;
 *)
-    echo "Usage: $0 {dev|prod|stop|logs|deploy|sync}"
+    echo "Usage: $0 {dev|prod|stop|logs|logs-remote|deploy|sync}"
     echo ""
-    echo "  dev     - Start development server (foreground)"
-    echo "  prod    - Start production server (background)"
-    echo "  stop    - Stop all services"
-    echo "  logs    - Show logs"
-    echo "  deploy  - Deploy and restart services"
-    echo "  sync    - Sync files only, no restart"
+    echo "  dev         - Start development server (foreground)"
+    echo "  prod        - Start production server (background)"
+    echo "  stop        - Stop all services"
+    echo "  logs        - Show local logs"
+    echo "  logs-remote - Show logs from remote server"
+    echo "  deploy      - Deploy and restart services"
+    echo "  sync        - Sync files only, no restart"
     exit 1
     ;;
 esac
