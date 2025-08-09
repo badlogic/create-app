@@ -24,6 +24,7 @@ sync_files() {
       --include="dist/***" \
       --include="infra/***" \
       --include="run.sh" \
+      --include=".env" \
       --exclude="*" \
       --delete \
       ./ $SERVER:$SERVER_DIR/$DOMAIN/
@@ -38,10 +39,18 @@ dev)
     npm install
     node infra/build.js
     node infra/build.js --watch &
+    # Load .env file if it exists
+    if [ -f .env ]; then
+        export $(grep -v '^#' .env | xargs)
+    fi
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml up --build --menu=false
     ;;
 prod)
     echo "Starting production server..."
+    # Load .env file if it exists
+    if [ -f .env ]; then
+        export $(grep -v '^#' .env | xargs)
+    fi
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml up -d --build
     ;;
 stop)
