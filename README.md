@@ -10,7 +10,7 @@ Perfect for:
 - **Personal projects** - blogs, portfolios, side projects
 - **Small businesses** - company websites, internal tools
 - **Prototypes** - MVPs that need real deployment
-- **Learning** - understanding modern deployment without platform lock-in
+- **Learning** - because it's fun to run your own infra stack
 
 Not suitable for:
 - **High-scale applications** (use Kubernetes/cloud platforms)
@@ -28,7 +28,7 @@ cd my-app
 # Start development server
 ./run.sh dev
 
-# Deploy to your server
+# Deploy to your server (see Server section below)
 ./run.sh deploy
 ```
 
@@ -54,7 +54,7 @@ npx @mariozechner/create-app --help
 
 #### Static
 - **Description**: Static file server with modern frontend tooling
-- **Features**: 
+- **Features**:
   - Tailwind CSS 4 with live reload
   - TypeScript support
   - Automated testing setup

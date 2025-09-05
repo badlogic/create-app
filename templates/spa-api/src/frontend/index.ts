@@ -68,13 +68,25 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   const ws = new WebSocket(`ws://${window.location.host}/livereload`);
   ws.onmessage = () => {
     // Force hard refresh to clear any cached state
-    location.reload(true);
+    location.reload();
   };
   
-  // Reconnect on disconnect
+  // Reconnect on disconnect with exponential backoff
+  let reconnectAttempts = 0;
+  const maxReconnectAttempts = 5;
+  
   ws.onclose = () => {
-    setTimeout(() => {
-      location.reload(true);
-    }, 1000);
+    if (reconnectAttempts < maxReconnectAttempts) {
+      const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 10000);
+      reconnectAttempts++;
+      
+      setTimeout(() => {
+        location.reload();
+      }, delay);
+    }
+  };
+  
+  ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
   };
 }

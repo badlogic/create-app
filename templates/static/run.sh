@@ -25,6 +25,8 @@ sync_files() {
       --include="infra/***" \
       --include="run.sh" \
       --include=".env" \
+      --include="package-lock.json" \
+      --include="package.json" \
       --exclude="*" \
       --delete \
       ./ $SERVER:$SERVER_DIR/$DOMAIN/
@@ -34,23 +36,37 @@ pushd "$SCRIPT_DIR" > /dev/null
 
 case "$1" in
 dev)
+    # Ensure .env exists to prevent docker-compose errors
+    touch .env
     ./run.sh stop
     echo "Starting development server..."
     npm install
     node infra/build.js
     node infra/build.js --watch &
-    # Load .env file if it exists
-    if [ -f .env ]; then
-        export $(grep -v '^#' .env | xargs)
-    fi
+    WATCH_PID=$!
+
+    # Function to cleanup background processes
+    cleanup() {
+        echo -e "\nCleaning up..."
+        # Kill the watch process
+        if [ ! -z "$WATCH_PID" ]; then
+            kill $WATCH_PID 2>/dev/null
+            echo "Stopped watch process"
+        fi
+        # Also cleanup any node processes running build.js
+        pkill -f "node infra/build.js" 2>/dev/null
+        exit 0
+    }
+
+    # Set trap for cleanup
+    trap cleanup INT TERM
+
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.dev.yml up --build --menu=false
-    ;;
+
+    # Cleanup after docker-compose exits
+    cleanup
 prod)
     echo "Starting production server..."
-    # Load .env file if it exists
-    if [ -f .env ]; then
-        export $(grep -v '^#' .env | xargs)
-    fi
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml up -d --build
     ;;
 stop)

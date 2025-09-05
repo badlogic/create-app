@@ -3,13 +3,13 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   const ws = new WebSocket(`ws://${window.location.host}/livereload`);
   ws.onmessage = () => {
     // Force hard refresh to clear any cached state
-    location.reload(true);
+    location.reload();
   };
-  
+
   // Reconnect on disconnect
   ws.onclose = () => {
     setTimeout(() => {
-      location.reload(true);
+      location.reload();
     }, 1000);
   };
 }
