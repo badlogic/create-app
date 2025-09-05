@@ -1,6 +1,6 @@
 {
   "name": "@mariozechner/create-app",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "CLI for creating deployable web applications with Docker, Caddy, and modern tooling",
   "bin": {
     "create-app": "dist/cli.js"
