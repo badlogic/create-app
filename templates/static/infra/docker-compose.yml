@@ -6,3 +6,8 @@ services:
     volumes:
       - ../dist:/srv:ro
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - internal
+
+networks:
+  internal:

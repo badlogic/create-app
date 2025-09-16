@@ -1,5 +1,6 @@
 # Production overrides
 services:
   backend:
+    # Backend only needs internal network, not exposed to caddy directly
     networks:
-      - caddy-network
+      - internal
