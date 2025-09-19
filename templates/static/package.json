@@ -11,13 +11,13 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2",
-    "@types/node": "^20.11.2",
-    "husky": "^9.1.1",
-    "tailwindcss": "^4.1.11",
-    "@tailwindcss/cli": "^4.1.11",
+    "@biomejs/biome": "^2.2.4",
+    "@types/node": "^24.5.2",
+    "husky": "^9.1.7",
+    "tailwindcss": "^4.1.13",
+    "@tailwindcss/cli": "^4.1.13",
     "tsup": "^8.5.0",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }

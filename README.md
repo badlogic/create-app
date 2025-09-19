@@ -71,7 +71,24 @@ npx @mariozechner/create-app --help
   - Separate frontend/backend builds
 - **Use for**: Web apps, internal tools, data-driven applications
 
-### More templates coming soon!
+#### Web Library
+- **Description**: TypeScript library for the browser
+- **Features**:
+  - ESM output with source maps
+  - TypeScript declarations
+  - Hot-reload development server with @mariozechner/hotserve
+  - Prettier formatting + Biome linting
+  - Publishing script included
+- **Use for**: Browser libraries, web components, frontend utilities
+
+#### Node Library
+- **Description**: TypeScript library for Node.js with CLI support
+- **Features**:
+  - ESM output with TypeScript declarations
+  - CLI executable support
+  - Prettier formatting + Biome linting
+  - Publishing script included
+- **Use for**: Node.js libraries, CLI tools, backend utilities
 
 ## Prerequisites
 
@@ -102,7 +119,7 @@ A    *.yourdomain.com  -> server-ip  (for subdomains)
 | `--apiPort` | | API development port | `--apiPort 8000` |
 | `--help` | `-h` | Show help message | `--help` |
 
-**Available templates:** `static`, `spa-api`
+**Available templates:** `static`, `spa-api`, `web-library`, `node-library`
 
 ### Template-Specific Instructions
 
@@ -257,6 +274,30 @@ Before deploying, your server needs Docker and Caddy configured. See [SERVER.md]
 
 **Template-specific issues:**
 Check the `README.md` in your generated project for troubleshooting specific to your template type.
+
+## Publishing
+
+The `publish.sh` script handles versioning, tagging, and publishing to npm:
+
+```bash
+# Patch release (1.0.0 -> 1.0.1)
+./publish.sh
+
+# Minor release (1.0.1 -> 1.1.0)
+./publish.sh minor
+
+# Major release (1.1.0 -> 2.0.0)
+./publish.sh major
+```
+
+The script will:
+1. Check for uncommitted changes
+2. Run checks (format, lint, type-check)
+3. Build the project
+4. Bump version in package.json
+5. Commit and tag the version
+6. Push to GitHub with tags
+7. Publish to npm
 
 ## Contributing
 

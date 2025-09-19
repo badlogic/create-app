@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>{{packageName}} - Example</title>
+   <style>
+      body {
+         font-family: system-ui, -apple-system, sans-serif;
+         margin: 0;
+         padding: 2rem;
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         min-height: 100vh;
+      }
+      h1 {
+         text-align: center;
+         color: white;
+         margin-bottom: 2rem;
+      }
+      .demo-container {
+         background: white;
+         border-radius: 12px;
+         padding: 2rem;
+         max-width: 600px;
+         margin: 0 auto;
+         box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      }
+      pre {
+         background: #f5f5f5;
+         padding: 1rem;
+         border-radius: 8px;
+         overflow-x: auto;
+      }
+      code {
+         font-family: 'Courier New', monospace;
+      }
+   </style>
+</head>
+<body>
+   <h1>{{packageName}} Demo</h1>
+
+   <div class="demo-container">
+      <h2>Counter Component</h2>
+      <my-counter></my-counter>
+
+      <h3>Usage:</h3>
+      <pre><code>&lt;!-- Import the library as ES module --&gt;
+&lt;script type="module" src="./dist/index.js"&gt;&lt;/script&gt;
+
+&lt;!-- Use the component --&gt;
+&lt;my-counter&gt;&lt;/my-counter&gt;</code></pre>
+   </div>
+
+   <!-- Load the library as ES module -->
+   <script type="module" src="./dist/index.js"></script>
+</body>
+</html>

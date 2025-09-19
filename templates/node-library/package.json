@@ -1,0 +1,29 @@
+{
+  "name": "{{packageName}}",
+  "version": "0.1.0",
+  "description": "{{description}}",
+  "author": "{{author}}",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": "./dist/cli.js",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsdown src/index.ts src/cli.ts --format esm --sourcemap --platform node && tsc --declaration --emitDeclarationOnly --outDir dist",
+    "dev": "tsx watch src/index.ts",
+    "test": "npx tsx --test --test-concurrency=1 src/**/*.test.ts",
+    "format": "prettier --write .",
+    "lint": "biome lint .",
+    "check": "npm run format && npm run lint && tsc --noEmit",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
+    "@types/node": "^24.5.2",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
+    "tsdown": "^0.15.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}

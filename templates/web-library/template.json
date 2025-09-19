@@ -1,0 +1,24 @@
+{
+  "name": "Web Library",
+  "description": "TypeScript library for the browser",
+  "prompts": [
+    {
+      "name": "packageName",
+      "type": "text",
+      "message": "NPM package name (e.g. my-library, @myorg/library)",
+      "default": "{{name}}"
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "message": "Package description",
+      "default": "A TypeScript library for the browser"
+    },
+    {
+      "name": "author",
+      "type": "text",
+      "message": "Author name",
+      "default": ""
+    }
+  ]
+}
