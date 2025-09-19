@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import chalk from "chalk";
-import { createApp } from "./index.js";
+import { createApp, discoverTemplates } from "./index.js";
 
 type ParsedArgs = {
    projectName?: string;
@@ -41,26 +43,38 @@ function parseArgs(args: string[]): ParsedArgs {
 }
 
 function showHelp() {
-   console.log(chalk.blue("Create App - CLI for creating deployable web applications"));
+   const __dirname = path.dirname(fileURLToPath(import.meta.url));
+   const templatesDir = path.join(__dirname, "..", "templates");
+   const templates = discoverTemplates(templatesDir);
+
+   console.log(chalk.blue("Create App - Project scaffolding for TypeScript applications and libraries"));
    console.log();
    console.log(chalk.bold("Usage:"));
    console.log("  npx @mariozechner/create-app <project-name> [options]");
    console.log();
    console.log(chalk.bold("Options:"));
-   console.log("  -t, --template <name>     Template to use (static, frontend-api, fullstack)");
-   console.log("  --domain <domain>         Domain for the app (e.g. myapp.com)");
-   console.log("  --server <server>         Production server hostname");
-   console.log("  --serverDir <path>        Server directory path");
-   console.log("  --frontendPort <port>     Frontend development port");
-   console.log("  --apiPort <port>          API development port");
+   console.log("  -t, --template <name>     Template to use");
    console.log("  -h, --help                Show this help message");
+   console.log("  --<option> <value>        Template-specific options (see below)");
    console.log();
+   console.log(chalk.bold("Available Templates:"));
+   console.log();
+
+   for (const template of templates) {
+      console.log(chalk.yellow(`  ${template.folderName}`) + ` - ${template.description}`);
+      if (template.prompts && template.prompts.length > 0) {
+         const optionNames = template.prompts.map((p) => `--${p.name}`).join(", ");
+         console.log(chalk.dim(`    Options: ${optionNames}`));
+      }
+      console.log();
+   }
+
    console.log(chalk.bold("Examples:"));
    console.log("  npx @mariozechner/create-app my-blog");
-   console.log("  npx @mariozechner/create-app my-app --template frontend-api --domain myapp.com");
-   console.log(
-      "  npx @mariozechner/create-app api-server -t frontend-api --domain api.example.com --server myserver.com",
-   );
+   console.log("  npx @mariozechner/create-app my-app --template spa-api --domain myapp.com");
+   console.log("  npx @mariozechner/create-app my-lib --template web-library --packageName @myorg/mylib");
+   console.log();
+   console.log(chalk.dim("Note: All options can be provided via CLI or will be prompted interactively"));
 }
 
 async function main() {

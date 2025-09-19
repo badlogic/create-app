@@ -20,7 +20,7 @@ function replaceTemplateVars(content: string, config: Record<string, string | nu
    return result;
 }
 
-function discoverTemplates(templatesDir: string): Array<TemplateConfig & { folderName: string }> {
+export function discoverTemplates(templatesDir: string): Array<TemplateConfig & { folderName: string }> {
    const templates: Array<TemplateConfig & { folderName: string }> = [];
 
    const templateDirs = fs
@@ -397,6 +397,21 @@ export async function createApp(
    console.log();
    console.log("Next steps:");
    console.log(chalk.dim(`  cd ${projectName}`));
-   console.log(chalk.dim("  ./run.sh dev         # Local development"));
-   console.log(chalk.dim("  ./run.sh deploy      # Deploy to production"));
+
+   // Template-specific next steps
+   if (template.folderName === "web-library" || template.folderName === "node-library") {
+      console.log(chalk.dim("  npm install          # Install dependencies"));
+      console.log(chalk.dim("  npm run dev          # Development mode"));
+      console.log(chalk.dim("  npm run build        # Build for production"));
+      console.log(chalk.dim("  ./publish.sh         # Publish to npm"));
+   } else if (template.folderName === "static" || template.folderName === "spa-api") {
+      console.log(chalk.dim("  ./run.sh dev         # Local development"));
+      console.log(chalk.dim("  ./run.sh deploy      # Deploy to production"));
+   } else {
+      // Fallback for any future templates
+      console.log(chalk.dim("  npm install          # Install dependencies"));
+   }
+
+   console.log();
+   console.log(chalk.dim("Check README.md for detailed instructions"));
 }
