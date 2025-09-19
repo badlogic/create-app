@@ -47,10 +47,12 @@ function showHelp() {
    const templatesDir = path.join(__dirname, "..", "templates");
    const templates = discoverTemplates(templatesDir);
 
-   console.log(chalk.blue("Create App - Project scaffolding for TypeScript applications and libraries"));
+   console.log(chalk.blue("Create App - Project scaffolding for applications and libraries"));
    console.log();
    console.log(chalk.bold("Usage:"));
    console.log("  npx @mariozechner/create-app <project-name> [options]");
+   console.log();
+   console.log(chalk.dim("Running with just a project name starts interactive mode"));
    console.log();
    console.log(chalk.bold("Options:"));
    console.log("  -t, --template <name>     Template to use");
@@ -61,20 +63,13 @@ function showHelp() {
    console.log();
 
    for (const template of templates) {
-      console.log(chalk.yellow(`  ${template.folderName}`) + ` - ${template.description}`);
+      console.log(`  ${chalk.yellow(template.folderName)} - ${template.description}`);
       if (template.prompts && template.prompts.length > 0) {
          const optionNames = template.prompts.map((p) => `--${p.name}`).join(", ");
          console.log(chalk.dim(`    Options: ${optionNames}`));
       }
       console.log();
    }
-
-   console.log(chalk.bold("Examples:"));
-   console.log("  npx @mariozechner/create-app my-blog");
-   console.log("  npx @mariozechner/create-app my-app --template spa-api --domain myapp.com");
-   console.log("  npx @mariozechner/create-app my-lib --template web-library --packageName @myorg/mylib");
-   console.log();
-   console.log(chalk.dim("Note: All options can be provided via CLI or will be prompted interactively"));
 }
 
 async function main() {
