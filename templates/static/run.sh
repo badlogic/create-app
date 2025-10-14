@@ -65,6 +65,7 @@ dev)
 
     # Cleanup after docker-compose exits
     cleanup
+    ;;
 prod)
     echo "Starting production server..."
     docker compose -p $PROJECT -f infra/docker-compose.yml -f infra/docker-compose.prod.yml up -d --build

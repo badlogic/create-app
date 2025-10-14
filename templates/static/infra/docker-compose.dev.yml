@@ -11,3 +11,5 @@ services:
     command: sh -c "npm install -g livereload && livereload /app/public --port 35729 --bind 0.0.0.0"
     volumes:
       - ../dist:/app/public
+    networks:
+      - internal

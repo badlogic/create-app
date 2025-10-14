@@ -1,0 +1,23 @@
+{
+  "name": "SPA + API + mini-lit",
+  "description": "Single Page App with API backend using Lit and mini-lit components",
+  "prompts": [
+    {
+      "name": "domain",
+      "type": "text",
+      "message": "Domain (e.g. myapp.com)"
+    },
+    {
+      "name": "server",
+      "type": "text",
+      "message": "Production server",
+      "initial": "slayer.marioslab.io"
+    },
+    {
+      "name": "serverDir",
+      "type": "text",
+      "message": "Server directory",
+      "initial": "/home/badlogic"
+    }
+  ]
+}

@@ -4,3 +4,5 @@ services:
     command: sh -c "npm install --ignore-scripts && npx tsx watch --inspect=0.0.0.0:9229 dist/backend/server.js"
     ports:
       - "9229:9229"  # Debug port
+    networks:
+      - internal

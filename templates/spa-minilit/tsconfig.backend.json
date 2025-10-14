@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "outDir": "./dist/backend",
+    "rootDir": "./src/backend",
+    "lib": ["ES2022"]
+  },
+  "include": ["src/backend/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

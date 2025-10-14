@@ -1,0 +1,37 @@
+name: {{name}}
+
+services:
+  web:
+    image: caddy:alpine
+    restart: unless-stopped
+    labels:
+      caddy: {{domain}}
+      caddy.reverse_proxy: '{{upstreams 80}}'
+    volumes:
+      - ../dist:/srv:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - caddy-network
+      - default
+
+  backend:
+    image: node:alpine
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - ../.env
+    environment:
+      - PORT=3000
+    volumes:
+      - ../package.json:/app/package.json:ro
+      - ../package-lock.json:/app/package-lock.json:ro
+      - ../dist/backend:/app/dist/backend:ro
+      - backend_node_modules:/app/node_modules
+    command: sh -c "npm ci --omit=dev --ignore-scripts && node dist/backend/server.js"
+
+networks:
+  caddy-network:
+    external: true
+
+volumes:
+  backend_node_modules:
