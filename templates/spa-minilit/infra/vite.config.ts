@@ -14,7 +14,7 @@ export default defineConfig({
     port: FRONTEND_PORT,
     host: '0.0.0.0',
     proxy: {
-      '/api': {
+      '^/api/': {
         target: `http://127.0.0.1:${API_PORT}`,
         changeOrigin: true,
       },
@@ -25,7 +25,7 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   build: {
-    outDir: path.resolve(__dirname, '../dist'),
+    outDir: path.resolve(__dirname, '../dist/frontend'),
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(__dirname, '../src/frontend/index.html'),

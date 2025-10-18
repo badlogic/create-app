@@ -29,6 +29,9 @@ dev)
     echo "Backend API: http://localhost:3000"
     echo ""
 
+    # Create data directory if it doesn't exist
+    mkdir -p data
+
     # Start backend in background
     npx tsx watch src/backend/server.ts &
     BACKEND_PID=$!

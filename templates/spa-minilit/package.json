@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@mariozechner/mini-lit": "^0.1.9",
+    "@vaadin/router": "^2.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "lit": "^3.3.1"
